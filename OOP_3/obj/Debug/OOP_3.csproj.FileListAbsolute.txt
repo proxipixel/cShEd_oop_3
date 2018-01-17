@@ -1,0 +1,6 @@
+C:\Users\proxipixel\Documents\Visual Studio 2015\Projects\c#_nix_tasks\OOP\OOP_3\OOP_3\bin\Debug\OOP_3.exe.config
+C:\Users\proxipixel\Documents\Visual Studio 2015\Projects\c#_nix_tasks\OOP\OOP_3\OOP_3\bin\Debug\OOP_3.exe
+C:\Users\proxipixel\Documents\Visual Studio 2015\Projects\c#_nix_tasks\OOP\OOP_3\OOP_3\bin\Debug\OOP_3.pdb
+C:\Users\proxipixel\Documents\Visual Studio 2015\Projects\c#_nix_tasks\OOP\OOP_3\OOP_3\obj\Debug\OOP_3.csprojResolveAssemblyReference.cache
+C:\Users\proxipixel\Documents\Visual Studio 2015\Projects\c#_nix_tasks\OOP\OOP_3\OOP_3\obj\Debug\OOP_3.exe
+C:\Users\proxipixel\Documents\Visual Studio 2015\Projects\c#_nix_tasks\OOP\OOP_3\OOP_3\obj\Debug\OOP_3.pdb
