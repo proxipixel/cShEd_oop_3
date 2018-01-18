@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
@@ -38,21 +39,21 @@ namespace OOP3
             do
             {
                 // main menu
-                Console.Write("\n\n   Main menu:\n\n[1] Create new record for an employee of 'Fixed rate' type\n[2] Create new record for an employee of 'Hourly rate'\n[3] Manage records of existing employees\n(type an option's number and confirm choice by pressing 'Enter'): ");
-                while (!Int32.TryParse(Console.ReadLine(), out userChoice) || (userChoice < 1 | userChoice > 3))
+                Console.Write("\n\n   Main menu:\n\n[1] Create new record for an employee of 'Fixed rate' type\n[2] Create new record for an employee of 'Hourly rate'\n[3] Manage records of existing employees\n[4] Import employees' data from an XML file\n\n(type an option's number and confirm your choice by pressing 'Enter'): ");
+                while (!Int32.TryParse(Console.ReadLine(), out userChoice) || (userChoice < 1 | userChoice > 4))
                 {
                     Console.Write("\nWhoops ! No such option within the menu ! Please pick a valid one: ");
                 }
-                // prevention of 'existing employees' menu item usege in case the list is empty 
+                // prevention of 'existing employees' option usage in case the list is empty 
                 if (userChoice == 3 && empList.Count == 0)
                 {
-                    Console.Write("\nThere's no employee created yet !\nPlease create at least one empoyee to use 'Manage existing employees' menu item !");
+                    Console.Write("\nThe employees list is empty !\nPlease create at least one empoyee to use 'Manage existing employees' option !");
                     continue;
                 }
 
                 switch (userChoice)
                 {
-                    case 1: //'Fixed rate' case
+                    case 1: // 'Fixed rate' case
                         //adding an eployee's name
                         Console.Write("\nEnter an employee's name: ");
                         while (String.IsNullOrWhiteSpace(aName = Console.ReadLine()))
@@ -78,23 +79,70 @@ namespace OOP3
                         {
                             Console.Write("\nHours amount mustn't be empty ! Please enter a valid amount: ");
                         }
-                        // new 'hourly type employee' instantiation
+                        // new 'hourly type' employee instantiation
                         empList.Add(new Hourly { Name = aName, Hours = userChoice });
                         Console.Write("\nNew 'Hourly rate' employee successfully created !");
 
                         break;
 
-                    case 3:
-                        // sub menu to manage existing employees
-                        Console.Write("\n   Manage existing employees:\n\n[1] Sort a list of employees\n[2] Display summary for all existing employees\n[3] Display specific number of employees from the beginning of the list\n[4] Display specific number of employees from the end of the list\n[5] Export employees' data into an XML file\n[6] Import employees' data from an XML file\n[7] Check an exported XML file's status\n(type an option's number and confirm choice by pressing 'Enter'): ");
-                        while (!Int32.TryParse(Console.ReadLine(), out userChoice) || (userChoice < 1 | userChoice > 7))
+                    case 3: // sub menu to manage existing employees
+                        Console.Write("\n   Manage existing employees:\n\n[1] Sort a list of employees\n[2] Display summary for all existing employees\n[3] Display specific number of employees from the top of the list\n[4] Display specific number of employees from the bottom of the list\n[5] Export employees' data into an XML file\n\n(type an option's number and confirm your choice by pressing 'Enter'): ");
+                        while (!Int32.TryParse(Console.ReadLine(), out userChoice) || (userChoice < 1 | userChoice > 5))
                         {
-                            Console.Write("\nWhoops ! No such option within the menu ! Please pick a valid one: ");
+                            Console.Write("\nWhoops... No such option within the menu! Please pick a valid one: ");
                         }
 
                         switch (userChoice)
                         {
                             case 1:
+
+                                bool isEqual = false;
+                                if (empList.Count == 1) // change the algo in a way that one's elements aren't compared with themselves
+                                {
+                                    Console.Out.Write("\nInsufficient number of records to sort or the list is empty. There must be at least two employees in the list to perform sorting operation.");
+                                    break;
+                                }
+                                else
+                                {
+                                    for (int i = 0; (i < (empList.Count - 1) && isEqual != true); i++)
+                                    {
+                                        for (int j = (i + 1); j < (empList.Count); j++)
+                                        {
+                                            if (empList[i].Salary != empList[j].Salary)
+                                                isEqual = false;
+                                            else
+                                            {
+                                                isEqual = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (isEqual == false)
+                                {
+                                    List<Employee> temp = new List<Employee>(empList);
+
+                                    for (int i = 0; i < empList.Count; i++)
+                                    {
+                                        for (int j = 0; j < empList.Count; j++)
+                                        {
+                                            if (empList[i].Salary > empList[j].Salary)
+                                            {
+                                                temp[i] = empList[i];
+                                                empList[i] = empList[j];
+                                                empList[j] = temp[i];
+                                            }
+                                        }
+                                    }
+
+                                    for (int i = 0; i < empList.Count; i++)
+                                    {
+                                        Console.Write("empList[{0}], ", empList[i].Salary);
+                                    }
+                                }
+                                else
+                                    Console.Out.Write("\n'Name field' sorting");
 
                                 break;
 
@@ -110,9 +158,31 @@ namespace OOP3
 
                             case 3:
 
+                                Console.Write("\nEnter a number of employees you need to be displayed: ");
+                                while (!Int32.TryParse(Console.ReadLine(), out userChoice) || (userChoice < 1 | userChoice > empList.Count))
+                                {
+                                    Console.Write("\nInput value must be above zero and equal or less than total number of employees in the list: ");
+                                }
+                                Console.Write("\nEMPLOYEE’s NAME\n");
+                                for (int i = 0; i < userChoice; i++)
+                                {
+                                    Console.Write("\n{0}", empList[i].Name);
+                                }
+
                                 break;
 
                             case 4:
+
+                                Console.Write("\nEnter a number of employees you need to be displayed: ");
+                                while (!Int32.TryParse(Console.ReadLine(), out userChoice) || (userChoice < 1 | userChoice > empList.Count))
+                                {
+                                    Console.Write("\nInput value must be above zero and equal or less than total number of employees in the list: ");
+                                }
+                                Console.Write("\nEMPLOYEE’s NAME\n");
+                                for (int i = empList.Count - 1; i >= (empList.Count - userChoice); i--)
+                                {
+                                    Console.Write("\n{0}", empList[i].Name);
+                                }
 
                                 break;
 
@@ -124,34 +194,35 @@ namespace OOP3
                                 Console.Write("\nEmployees list successfuly exported into a file into your 'Desktop' directory !");
 
                                 break;
+                        }
 
-                            case 6: // import (deserialization) of an XML containing emloyees
+                        break;
 
-                                if (!File.Exists(path))
-                                {
-                                    Console.Write("\nThere's no file to import from ! You need to export an employees list first .");
-                                    continue;
-                                }
-                                List<Employee> deserList;
-                                deserList = serOut(path);
-                                Console.Write("\nFollowing employees successfuly imported from a file:\n\nID\tNAME\t\tSALARY\n");
-                                foreach (Employee anEmployee in deserList)
-                                {
-                                    Console.Write("\n{0}\t{1}\t\t{2}", anEmployee.Id, anEmployee.Name, anEmployee.Salary);
-                                }
-
-                                break;
-
-                            case 7:
-
-                                break;
-
+                    case 4: // import (deserialization) of an XML containing emloyees
+                        try
+                        {
+                            if (!File.Exists(path))
+                            {
+                                Console.Write("\nThere's no file to import from ! You need to export an employees list first .");
+                                continue;
+                            }
+                            List<Employee> deserList;
+                            deserList = serOut(path);
+                            Console.Write("\nFollowing employees successfuly imported from a file:\n\nID\tNAME\t\tSALARY\n");
+                            foreach (Employee anEmployee in deserList)
+                            {
+                                Console.Write("\n{0}\t{1}\t\t{2}", anEmployee.Id, anEmployee.Name, anEmployee.Salary);
+                            }
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            Console.WriteLine("\nIt seems that your file isn't OK !\n Please make sure the file you're importing is correct.");
                         }
 
                         break;
                 }
 
-                Console.Write("\n\nPress any key to continue or 'Ctrl+c' combination to close the program");
+                Console.Write("\n\nPress any key to continue or 'Ctrl+c' shortcut to shutdown the program");
                 Console.ReadKey(true);
             }
             while (true);
