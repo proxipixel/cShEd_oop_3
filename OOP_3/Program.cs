@@ -191,7 +191,7 @@ namespace OOP3
                                 if (File.Exists(path))
                                     File.Delete(path);
                                 serIn(empList, path);
-                                Console.Write("\nEmployees list successfuly exported into a file into your 'Desktop' directory !");
+                                Console.Write("\nEmployees list successfuly exported into a file in your 'Desktop' directory !");
 
                                 break;
                         }
@@ -199,6 +199,9 @@ namespace OOP3
                         break;
 
                     case 4: // import (deserialization) of an XML containing emloyees
+
+                        int idStart = empList.Count;
+                        List<Employee> deserList;
                         try
                         {
                             if (!File.Exists(path))
@@ -206,10 +209,19 @@ namespace OOP3
                                 Console.Write("\nThere's no file to import from ! You need to export an employees list first .");
                                 continue;
                             }
-                            List<Employee> deserList;
                             deserList = serOut(path);
+                            empList.AddRange(deserList);
+
+                            if (idStart != 0)
+                            {
+                                for (int i = idStart; i < empList.Count; i++)
+                                {
+                                    empList[i].Id = empList[i-1].Id + 1;
+                                }
+                            }
+
                             Console.Write("\nFollowing employees successfuly imported from a file:\n\nID\tNAME\t\tSALARY\n");
-                            foreach (Employee anEmployee in deserList)
+                            foreach (Employee anEmployee in empList)
                             {
                                 Console.Write("\n{0}\t{1}\t\t{2}", anEmployee.Id, anEmployee.Name, anEmployee.Salary);
                             }

@@ -3,10 +3,7 @@
     public abstract class Employee
     {
         static int id;
-        /*
-        double salary;
-        */
-
+       
         // id property
         public int Id { get; set; }
 
